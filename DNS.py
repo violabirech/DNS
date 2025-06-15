@@ -23,7 +23,7 @@ query_api = client.query_api()
 
 query = f"""
 from(bucket: "{INFLUXDB_BUCKET}")
-|> range(start: -1h)
+|> range(start: -100h)
 |> filter(fn: (r) => r["_measurement"] == "dns")
 |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
 """
@@ -33,7 +33,7 @@ df = pd.concat(df, ignore_index=True) if isinstance(df, list) else df
 df = df.dropna().reset_index(drop=True)
 
 if df.empty:
-    st.warning("⚠️ No DNS data found in the last 60 minutes. Please check your InfluxDB source.")
+    st.warning("⚠️ No DNS data found in the last 6000 minutes. Please check your InfluxDB source.")
     st.stop()
 
 # --- Isolation Forest Anomaly Detection ---
